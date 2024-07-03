@@ -134,12 +134,12 @@ public class ApiController {
 		return jwtService.create(paramClaim);
 	}
 	
-	@GetMapping("/pageContent")
+	@GetMapping("/parsing")
 	@ResponseBody
 	@Operation(summary = "page content API", description = "API")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success", content = {
 			@Content(schema = @Schema(implementation = UserDto.class)) }) })
-	public ResponseEntity<?> pageContent(@RequestParam(value="url" , defaultValue="https://bringko.com/pc/myp/privacy.php")  String url) throws Exception {
+	public ResponseEntity<?> parsing(@RequestParam(value="url" , defaultValue="https://bringko.com/pc/myp/privacy.php")  String url) throws Exception {
 
 		Map<String, Integer> sortedWordFreq = new LinkedHashMap<>();
 		
