@@ -1,7 +1,7 @@
 Java 17 사용
 기존 프로젝트 https://github.com/lovesomi/spring-boot3-Api 복사 후 컨텐츠 추가
 
-##참고 
+### 참고 
 swagger : http://localhost:8080/api/swagger-ui/index.html#/API/pageContent
 url : http://localhost:8080/api/pageContent?urlStr=https://bringko.com/pc/myp/privacy.php 확인가능
 
