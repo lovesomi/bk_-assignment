@@ -133,3 +133,70 @@ public class ApiController {
 
 		return jwtService.create(paramClaim);
 	}
+	
+	@GetMapping("/pageContent")
+	@ResponseBody
+	@Operation(summary = "page content API", description = "API")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Success", content = {
+			@Content(schema = @Schema(implementation = UserDto.class)) }) })
+	public ResponseEntity<?> pageContent(@RequestParam(value="url" , defaultValue="https://bringko.com/pc/myp/privacy.php")  String url) throws Exception {
+
+		Map<String, Integer> sortedWordFreq = new LinkedHashMap<>();
+		
+		try {
+
+			JSONObject jsonObject = new JSONObject();
+			String jsonData = jsonObject.toString();
+
+			Connection.Response response = Jsoup.connect(url)
+					.timeout(200000) // 20초
+					.header("X-API-KEY", "aXC8zK6puHIf9l53L8TiQg==")
+					.ignoreContentType(true)
+					.header("Content-Type", "application/json")
+					.method(Connection.Method.GET) // JSON																							// 전송
+					.execute();
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+				
+			String text = response.parse().text();
+		
+			
+		    // 단어 빈도수를 저장할 Map
+	        Map<String, Integer> wordFreq = new HashMap<>();
+
+	        // StringTokenizer를 사용하여 단어 분리
+	        StringTokenizer tokenizer = new StringTokenizer(text, " .,?!;");
+
+	        // 각 단어의 빈도수 계산
+	        while (tokenizer.hasMoreTokens()) {
+	            String word = tokenizer.nextToken();
+	            wordFreq.put(word, wordFreq.getOrDefault(word, 0) + 1);
+	        }
+
+	        // 단어 빈도수 기준으로 정렬하기 위해 List에 Map.Entry를 저장
+	        List<Map.Entry<String, Integer>> entryList = new ArrayList<>(wordFreq.entrySet());
+
+	        // 빈도수 기준으로 내림차순 정렬
+	        entryList.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+	        // 정렬된 결과를 LinkedHashMap에 저장
+	        
+	        for (Map.Entry<String, Integer> entry : entryList) {
+	            sortedWordFreq.put(entry.getKey(), entry.getValue());
+	        }
+	        
+
+
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println(sortedWordFreq);
+
+		return ResponseEntity.ok().body(sortedWordFreq);
+	}
+
+
+}
